@@ -467,6 +467,3 @@ npm install -g allure-commandline
 ls reports/allure-results/
 ```
 
-## License
-
-This project is licensed under the MIT License.
