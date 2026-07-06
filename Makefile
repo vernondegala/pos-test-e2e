@@ -78,10 +78,10 @@ test-parallel:
 	pytest src/tests/ -n 4 --dist loadscope -v
 
 allure-report:
-	allure generate reports/allure-results -o reports/allure-report --clean
+	JAVA_HOME="$$HOME/Library/Java/JavaVirtualMachines/jdk-17.0.12+7-jre/Contents/Home" PATH="$$JAVA_HOME/bin:$$HOME/.local/bin:$$PATH" allure generate reports/allure-results -o reports/allure-report --clean
 
 allure-serve:
-	allure serve reports/allure-results --port 8081
+	JAVA_HOME="$$HOME/Library/Java/JavaVirtualMachines/jdk-17.0.12+7-jre/Contents/Home" PATH="$$JAVA_HOME/bin:$$HOME/.local/bin:$$PATH" allure serve reports/allure-results --port 8081
 
 k6-test:
 	k6 run src/tests/performance/k6/pos_browse_test.js
