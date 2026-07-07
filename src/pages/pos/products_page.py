@@ -172,7 +172,7 @@ class ProductsPage(BasePage):
             self.page.goto(f"{config.base_url}/web#model=product.template&view_type=form&cids=1", wait_until="load")
         self.fill_product_form(product_data)
         self.save()
-        self.wait_for_timeout(1000)
+        self.page.wait_for_timeout(1000)
         if not self._is_on_product_form():
             logger.warning("After save, not on product form; returning to list")
             self.navigate(f"{config.base_url}/web#model=product.template&view_type=list&cids=1")
