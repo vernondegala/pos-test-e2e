@@ -1,0 +1,22 @@
+INFO     src.core.browser_manager:browser_manager.py:41 Browser started: chromium (headless=True)
+INFO     src.pages.base_page:base_page.py:34 Navigated to: http://localhost:8069/web/login
+INFO     src.pages.pos.login_page:login_page.py:39 Login attempt with user: admin
+INFO     src.keywords.auth_keywords:auth_keywords.py:21 Admin login successful
+INFO     src.pages.pos.dashboard_page:dashboard_page.py:46 Opened POS module
+WARNING  src.pages.pos.products_page:products_page.py:171 Product create form not detected after UI click, navigating directly
+WARNING  src.core.self_healing.retry_handler:retry_handler.py:51 Attempt 1/3 failed for fill: Locator.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("[name=\"name\"] .o_input")
+. Retrying in 1.0s...
+WARNING  src.core.self_healing.retry_handler:retry_handler.py:51 Attempt 2/3 failed for fill: Locator.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("[name=\"name\"] .o_input")
+. Retrying in 2.0s...
+ERROR    src.core.self_healing.retry_handler:retry_handler.py:48 All 3 attempts failed for fill: Locator.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("[name=\"name\"] .o_input")
+INFO     src.pages.pos.dashboard_page:dashboard_page.py:93 Logged out
+INFO     src.keywords.auth_keywords:auth_keywords.py:45 Logout successful
+INFO     src.core.browser_manager:browser_manager.py:59 Screenshot saved: screenshots/FAILED_test_1783443508.png
+WARNING  src.core.browser_manager:browser_manager.py:84 Failed to stop tracing: Tracing.stop: Must start tracing before stopping
+INFO     src.core.browser_manager:browser_manager.py:103 Browser closed.
