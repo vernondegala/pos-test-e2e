@@ -40,35 +40,41 @@ class PosInterfacePage(BasePage):
 
     def navigate_to(self, pos_id: int = 1):
         self.navigate(f"{config.base_url}/pos/ui?config_id={pos_id}")
-        if not self.page.locator(self.SELECTORS["pos_container"]).is_visible():
-            logger.info("POS UI did not load directly, starting session via dashboard")
-            dashboard = DashboardPage(self.page)
-            dashboard.open_pos_module()
+        if self.page.locator(self.SELECTORS["pos_container"]).is_visible():
             self.wait_for_timeout(2000)
-            session_btns = [
-                '.o_kanban_record button:has-text("Session")',
-                '.o_kanban_record a:has-text("Session")',
-                '.o_kanban_record button:has-text("Open Session")',
-                '.o_kanban_record a:has-text("Open Session")',
-                '.o_kanban_record button:has-text("New Session")',
-            ]
-            start_btn = None
-            for sel in session_btns:
-                try:
-                    candidates = self.page.locator(sel)
-                    if candidates.count() > 0:
-                        btn = candidates.first
-                        if btn.is_visible():
-                            start_btn = btn
-                            break
-                except Exception:
-                    pass
-            if start_btn:
-                with self.page.expect_navigation(wait_until='load', timeout=20000):
-                    start_btn.click()
-                self.wait_for_element(self.SELECTORS["pos_container"], timeout=15000)
-            else:
-                raise Exception("Could not find Session/Open Session button")
+            self.start_session()
+            logger.info(f"Navigated to POS interface (config_id: {pos_id})")
+            return self
+        logger.info("POS UI did not load directly, starting session via dashboard")
+        self.navigate(config.base_url)
+        self.wait_for_page_load()
+        dashboard = DashboardPage(self.page)
+        dashboard.open_pos_module()
+        self.wait_for_timeout(2000)
+        session_btns = [
+            '.o_kanban_record button:has-text("Session")',
+            '.o_kanban_record a:has-text("Session")',
+            '.o_kanban_record button:has-text("Open Session")',
+            '.o_kanban_record a:has-text("Open Session")',
+            '.o_kanban_record button:has-text("New Session")',
+        ]
+        start_btn = None
+        for sel in session_btns:
+            try:
+                candidates = self.page.locator(sel)
+                if candidates.count() > 0:
+                    btn = candidates.first
+                    if btn.is_visible():
+                        start_btn = btn
+                        break
+            except Exception:
+                pass
+        if start_btn:
+            with self.page.expect_navigation(wait_until='load', timeout=20000):
+                start_btn.click()
+            self.wait_for_element(self.SELECTORS["pos_container"], timeout=15000)
+        else:
+            raise Exception("Could not find Session/Open Session button")
         self.wait_for_timeout(2000)
         self.start_session()
         logger.info(f"Navigated to POS interface (config_id: {pos_id})")
