@@ -23,7 +23,14 @@ class BasePage:
         return self.page.url
 
     def navigate(self, url: str):
-        self.page.goto(url, wait_until="load")
+        try:
+            self.page.goto(url, wait_until="load")
+        except Exception as e:
+            if "ERR_ABORTED" in str(e):
+                logger.warning(f"Navigation aborted to {url}, retrying with domcontentloaded")
+                self.page.goto(url, wait_until="domcontentloaded")
+            else:
+                raise
         logger.info(f"Navigated to: {url}")
 
     def wait_for_page_load(self):

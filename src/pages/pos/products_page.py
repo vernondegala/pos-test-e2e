@@ -67,19 +67,53 @@ class ProductsPage(BasePage):
             except Exception:
                 pass
         if clicked:
-            self.wait_for_element(self.SELECTORS["form_view"])
+            create_indicators = [
+                '.o_form_view.o_form_editable',
+                'div[name="name"].o_field_widget',
+                '.o_form_view[data-model="product.template"]',
+                '.o_form_view[data-model="product.product"]',
+            ]
+            found = False
+            for indicator in create_indicators:
+                try:
+                    self.page.locator(indicator).wait_for(state="visible", timeout=15000)
+                    found = True
+                    break
+                except Exception:
+                    pass
+            if not found:
+                self.page.locator(self.SELECTORS["form_view"]).wait_for(state="visible", timeout=15000)
         return self
+
+    def _fill_field(self, field_name: str, value: str):
+        fallbacks = [
+            f'[name="{field_name}"] .o_input',
+            f'input[name="{field_name}"]',
+            f'#{field_name}',
+            f'textarea[name="{field_name}"]',
+            f'label:has-text("{field_name.replace("_", " ").title()}") ~ .o_field_widget .o_input',
+            f'label:has-text("{field_name.replace("_", " ").title()}") + * .o_input',
+        ]
+        last_exception = None
+        for sel in fallbacks:
+            try:
+                self.page.locator(sel).wait_for(state="visible", timeout=3000)
+                self.page.locator(sel).fill(value)
+                return
+            except Exception as e:
+                last_exception = e
+        self.fill(fallbacks[0], value)
 
     @allure.step("Fill product form: {product_data}")
     def fill_product_form(self, product_data: dict):
         if "name" in product_data:
-            self.fill(self.SELECTORS["name_input"], product_data["name"])
+            self._fill_field("name", product_data["name"])
         if "price" in product_data:
-            self.fill(self.SELECTORS["price_input"], str(product_data["price"]))
+            self._fill_field("list_price", str(product_data["price"]))
         if "cost" in product_data:
-            self.fill(self.SELECTORS["cost_input"], str(product_data["cost"]))
+            self._fill_field("standard_price", str(product_data["cost"]))
         if "barcode" in product_data:
-            self.fill(self.SELECTORS["barcode_input"], product_data["barcode"])
+            self._fill_field("barcode", product_data["barcode"])
         if "category" in product_data:
             self.select_option(self.SELECTORS["category_select"], product_data["category"])
         return self
