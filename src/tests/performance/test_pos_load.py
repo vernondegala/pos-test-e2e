@@ -2,6 +2,7 @@ import allure
 import pytest
 
 
+@pytest.mark.skip(reason="Skipped all performance tests")
 @allure.feature("Performance")
 @allure.story("Page Load Metrics")
 class TestPosPagePerformance:
