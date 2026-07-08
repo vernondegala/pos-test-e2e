@@ -1,0 +1,19 @@
+INFO     src.core.browser_manager:browser_manager.py:41 Browser started: chromium (headless=True)
+INFO     src.pages.base_page:base_page.py:34 Navigated to: http://localhost:8069/web/login
+INFO     src.pages.pos.login_page:login_page.py:39 Login attempt with user: admin
+INFO     src.keywords.auth_keywords:auth_keywords.py:21 Admin login successful
+INFO     src.pages.base_page:base_page.py:34 Navigated to: http://localhost:8069/pos/ui?config_id=1
+INFO     src.pages.pos.pos_interface_page:pos_interface_page.py:48 POS UI did not load directly, starting session via dashboard
+WARNING  src.pages.base_page:base_page.py:30 Navigation aborted to http://localhost:8069, retrying with domcontentloaded
+INFO     src.pages.base_page:base_page.py:34 Navigated to: http://localhost:8069
+INFO     src.pages.pos.dashboard_page:dashboard_page.py:46 Opened POS module
+INFO     src.pages.pos.pos_interface_page:pos_interface_page.py:97 POS session started with opening cash: 100
+INFO     src.pages.pos.pos_interface_page:pos_interface_page.py:83 Navigated to POS interface (config_id: 1)
+INFO     src.keywords.pos_keywords:pos_keywords.py:20 POS interface opened (config_id: 1)
+INFO     src.pages.pos.pos_interface_page:pos_interface_page.py:99 Session already started, skipping cash control
+INFO     src.pages.pos.pos_interface_page:pos_interface_page.py:131 Selected first product
+INFO     src.pages.pos.pos_interface_page:pos_interface_page.py:131 Selected first product
+INFO     src.pages.pos.pos_interface_page:pos_interface_page.py:308 POS session closed
+INFO     src.pages.pos.dashboard_page:dashboard_page.py:93 Logged out
+INFO     src.keywords.auth_keywords:auth_keywords.py:45 Logout successful
+INFO     src.core.browser_manager:browser_manager.py:103 Browser closed.
