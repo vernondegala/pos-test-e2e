@@ -212,19 +212,65 @@ jobs:
   k6-performance:
     name: Performance Load Test (k6)
     runs-on: ubuntu-latest
-    if: github.event.inputs.test_suite == 'performance'
-    needs: [e2e-tests]
+    if: github.event.inputs.test_suite == 'performance' || github.event.inputs.test_suite == '' || github.event.inputs.test_suite == 'full'
+    services:
+      db:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: pos_test
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo17
+        options: >-
+          --health-cmd "pg_isready -U odoo -d pos_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v7
+
+      - name: Start Odoo
+        run: |
+          docker run -d --name odoo \
+            --network host \
+            -e HOST=localhost \
+            -e USER=odoo \
+            -e PASSWORD=odoo17 \
+            -e DB_NAME=pos_test \
+            -e ADMIN_PASSWORD=admin \
+            -e POS_DEMO=true \
+            -v "$(pwd)/docker/entrypoint.sh:/entrypoint-custom.sh" \
+            --entrypoint /bin/bash \
+            odoo:17.0 \
+            /entrypoint-custom.sh
+          echo "Waiting for Odoo..."
+          timeout=300
+          until curl -s http://localhost:8069/web/login | grep -q "web/login"; do
+            sleep 10
+            timeout=$((timeout - 10))
+            if [ $timeout -le 0 ]; then
+              echo "Odoo failed to start"
+              docker logs odoo
+              exit 1
+            fi
+          done
+          echo "Odoo is ready!"
+
       - name: Create reports directory
         run: mkdir -p reports/k6
+
+      - name: Install k6
+        run: |
+          curl -L -o /usr/local/bin/k6 https://github.com/grafana/k6/releases/download/v0.54.0/k6-v0.54.0-linux-amd64
+          chmod +x /usr/local/bin/k6
+
       - name: Run k6 load test
-        uses: grafana/k6-action@v0.3.1
-        with:
-          filename: src/tests/performance/k6/pos_browse_test.js
-          flags: --out json=reports/k6/performance-results.json
-        env:
-          BASE_URL: http://localhost:8069
+        run: |
+          k6 run src/tests/performance/k6/pos_browse_test.js \
+            --out json=reports/k6/performance-results.json \
+            -e BASE_URL=http://localhost:8069
+
       - name: Upload k6 results
         if: always()
         uses: actions/upload-artifact@v7
