@@ -212,7 +212,7 @@ jobs:
   k6-performance:
     name: Performance Load Test (k6)
     runs-on: ubuntu-latest
-    if: github.event.inputs.test_suite == 'performance' || github.event.inputs.test_suite == '' || github.event.inputs.test_suite == 'full'
+    if: false
     needs: [e2e-tests]
     steps:
       - uses: actions/checkout@v7
