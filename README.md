@@ -9,7 +9,7 @@ Automated E2E testing framework for [Odoo POS](https://github.com/odoo/odoo) (Po
 │                    Test Layer (Tests)                     │
 │  ┌────────────── ┐ ┌──────────┐ ┌────────────────── ─┐    │
 │  │  Functional   │ │ Negative │ │   Performance      │    │
-│  │    Tests      │ │  Tests   │ │  Tests (k6 + PW)   │    │
+│  │    Tests      │ │  Tests   │ │  Tests (skipped)   │    │
 │  └──────┬─────── ┘ └────┬─────┘ └─────────┬───────── ┘    │
 ├─────────┼────────── ────┼──────── ────────┼───────────────┤
 │         │   Keywords Layer (Shared Business Ops)          │
@@ -44,7 +44,7 @@ Automated E2E testing framework for [Odoo POS](https://github.com/odoo/odoo) (Po
 | **Browser Automation** | Playwright | Fast, reliable browser control with auto-waiting |
 | **Self-Healing** | Custom LocatorManager | Multi-strategy locator fallback chain |
 | **Reporting** | Allure Framework | Interactive HTML dashboard with graphs |
-| **Load Testing** | k6 (Grafana) | High-performance API load testing |
+| **Load Testing** | k6 (Grafana) | High-performance API load testing (currently skipped) |
 | **CI/CD** | GitHub Actions | Automated pipeline with matrix builds |
 | **Containerization** | Docker + Docker Compose | Isolated Odoo + PostgreSQL environment |
 | **Data Generation** | Faker + Custom | Randomized test data creation |
@@ -93,7 +93,7 @@ pos-test-e2e/
 │   │   │   ├── test_invalid_login.py
 │   │   │   ├── test_payment_failures.py
 │   │   │   └── test_data_validation.py
-│   │   └── performance/          # Performance test cases
+│   │   └── performance/          # Performance test cases (skipped)
 │   │       ├── test_pos_load.py
 │   │       └── k6/
 │   │           └── pos_browse_test.js
@@ -123,7 +123,7 @@ You need these tools installed on your machine before starting:
 |------|---------|---------|-------------------|
 | **Docker Desktop** | Latest | Runs Odoo and PostgreSQL in isolated containers | [Download Docker Desktop](https://www.docker.com/products/docker-desktop/) |
 | **Python** | 3.11+ | Runs the test framework | [Download Python](https://www.python.org/downloads/) |
-| **Node.js** | 18+ | Required for k6 performance tests (optional) | [Download Node.js](https://nodejs.org/) |
+| **Node.js** | 18+ | Required for k6 performance tests (optional; currently not needed) | [Download Node.js](https://nodejs.org/) |
 | **Git** | Latest | Clone the repository | [Download Git](https://git-scm.com/downloads) |
 
 > **Windows users**: Run all commands in PowerShell or Git Bash. Replace `python3` with `python` and use `.venv\Scripts\activate` to activate the virtual environment.
@@ -184,7 +184,7 @@ This installs:
 - **playwright** (browser automation — controls Chrome/Firefox/Safari)
 - **allure-pytest** (generates beautiful HTML test reports)
 - **faker** (generates random test data like names, emails, barcodes)
-- **k6** Python wrapper (for load testing)
+- **k6** Python wrapper (for load testing; currently skipped)
 
 The `playwright install chromium` command downloads the Chromium browser binary (headless) that Playwright uses to run tests. This is **not** your regular Chrome browser — it's a dedicated browser for testing.
 
@@ -483,7 +483,7 @@ These artifacts are attached to the Allure report for debugging.
 | **Payment Failures** | Cancel payment, zero quantity, empty order payment, invalid split payment, refund on empty order |
 | **Data Validation** | Empty product name, negative price, extremely long name, zero price, invalid email, empty customer name, delete non-existent product |
 
-### Performance Tests (6+ scenarios)
+### Performance Tests (6+ scenarios — currently skipped)
 
 | Test | Measurement |
 |------|-------------|
@@ -508,11 +508,11 @@ The pipeline (`test.yml`) runs on:
 ### Pipeline Stages
 
 ```
-┌─────────┐    ┌─────────── ┐    ┌─────────────┐    ┌────────┐
-│   Lint  │ => │  E2E Tests │ => │  k6 Load    │ => │ Report │
-│ (ruff + │    │ (Playwright│   │   Test       │    │(Allure)│
-│  mypy)  │    │  + Odoo)   │    │             │    │        │
-└─────────┘    └─────────── ┘    └─────────────┘    └────────┘
+┌─────────┐    ┌─────────── ┐    ┌────────┐
+│   Lint  │ => │  E2E Tests │ => │ Report │
+│ (ruff + │    │ (Playwright│    │(Allure)│
+│  mypy)  │    │  + Odoo)   │    │        │
+└─────────┘    └─────────── ┘    └────────┘
 ```
 
 ### Test Matrix
@@ -522,7 +522,7 @@ The pipeline (`test.yml`) runs on:
 | smoke | `smoke` | ~3 min |
 | functional | `functional` | ~15 min |
 | negative | `negative` | ~8 min |
-| performance | `performance` | ~10 min |
+| performance | `performance` | ~10 min (currently skipped) |
 | full | (all) | ~30 min |
 
 ### Artifacts
@@ -531,7 +531,7 @@ The pipeline (`test.yml`) runs on:
 - Failure screenshots (retained 14 days)
 - Playwright traces (retained 14 days)
 - JUnit XML reports (retained 30 days)
-- k6 performance results (retained 30 days)
+- k6 performance results (retained 30 days; currently skipped)
 
 ## Dashboard & Reporting
 
@@ -553,7 +553,7 @@ make allure-serve
 # Opens http://localhost:8081
 ```
 
-### k6 Performance Dashboard
+### k6 Performance Dashboard (currently skipped)
 
 k6 outputs JSON results that can be visualized in:
 - Grafana (with InfluxDB)
