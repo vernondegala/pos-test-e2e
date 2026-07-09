@@ -297,6 +297,7 @@ jobs:
     needs: [e2e-tests, allure-report]
     steps:
       - name: Slack Notification
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
