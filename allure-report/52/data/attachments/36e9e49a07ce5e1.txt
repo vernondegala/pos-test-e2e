@@ -1,0 +1,2 @@
+INFO     src.core.browser_manager:browser_manager.py:41 Browser started: chromium (headless=True)
+INFO     src.core.browser_manager:browser_manager.py:103 Browser closed.
