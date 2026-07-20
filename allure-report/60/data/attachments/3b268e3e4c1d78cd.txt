@@ -1,0 +1,5 @@
+INFO     src.core.browser_manager:browser_manager.py:41 Browser started: chromium (headless=True)
+INFO     src.pages.base_page:base_page.py:34 Navigated to: http://localhost:8069/web/login
+INFO     src.pages.pos.login_page:login_page.py:39 Login attempt with user: ' OR '1'='1
+INFO     src.keywords.auth_keywords:auth_keywords.py:38 Login failed as expected. Error: Wrong login/password
+INFO     src.core.browser_manager:browser_manager.py:103 Browser closed.
