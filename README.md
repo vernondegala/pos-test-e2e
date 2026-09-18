@@ -502,7 +502,6 @@ These artifacts are attached to the Allure report for debugging.
 The pipeline (`test.yml`) runs on:
 - Push to `main`, `develop`, `feature/*`
 - Pull requests to `main`
-- Daily schedule (06:00 UTC)
 - Manual trigger with environment selection
 
 ### Pipeline Stages
